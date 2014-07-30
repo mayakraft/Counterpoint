@@ -4,12 +4,6 @@
 
 from Johann Joseph Fux’s 1725 __Gradus ad Parnassum__, used to train Mozart, Haydn, Beethoven, and pretty much everyone else.
 
-# methods
-
-``` c
-void counterpoint(int *cantusFirmus, int count, node *cp, int startingInterval);
-```
-
 # usage
 
 note by note, coded as intervals from root (1)
