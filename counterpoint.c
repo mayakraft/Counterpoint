@@ -13,6 +13,7 @@ typedef struct step step;
 struct step{
     int interval;   // 1 for unison, 5 for fifth, etc..
     // no no, if this was 0 for unison, we could modulus to get the pitch value
+    // okay, compromise, alter this during calculation, so 0 is unison
     bool direction;
     bool stepwise;  // distance = 2;
     note fromNote;
@@ -36,7 +37,6 @@ void newNode(node *new, node *parent){
     new->numChildren = 0;
     new->parent = parent;
 }
-
 
 //void copyNode(node final, node *source){
 //    final.values = source->values;

@@ -35,19 +35,31 @@ void makeCounterpoint(){
         
     }
     int counterPoint[11];
-    counterPoint[0] = 1;
+    counterPoint[0] = 5;
     for(int i = 1; i < 11; i++){
-        if(steps[i].toNote.consonance){
+        if(steps[i-1].toNote.consonance && steps[i-1].toNote.perfect){
             // contrary or oblique motion only
-            if(steps[i].direction){ // CF goes up
-                counterPoint[i] = counterPoint[i-1] - 1;  // CP goes down
+            if(steps[i-1].direction){ // CF goes up
+                if(arc4random()%2 == 0)
+                    counterPoint[i] = counterPoint[i-1] - 1;  // CP goes down, contrary
+                else
+                    counterPoint[i] = counterPoint[i-1];      // CP stays same, oblique
             }
-            if(!steps[i].direction){ // CF goes down
-                counterPoint[i] = counterPoint[i-1] + 1;  // CP goes up
+            if(!steps[i-1].direction){ // CF goes down
+                if(arc4random()%2 == 0)
+                    counterPoint[i] = counterPoint[i-1] + 1;  // CP goes up, contrary
+                else
+                    counterPoint[i] = counterPoint[i-1];      // CP stays same, oblique
             }
         }
         else {
             // any 3 movements permitted
+            if(arc4random()%3 == 0)
+                counterPoint[i] = counterPoint[i-1] + 1;  // CP goes up
+            else if(arc4random()%2 == 0)
+                counterPoint[i] = counterPoint[i-1] - 1;  // CP goes down
+            else
+                counterPoint[i] = counterPoint[i-1];      // CP stays same, oblique
         }
         
         if(steps[i].fromNote.consonance && steps[i].toNote.consonance){
@@ -63,4 +75,18 @@ void makeCounterpoint(){
             
         }
     }
+    printf("  ");
+    for(int i = 0; i < 10; i++){
+        if(steps[i].direction) printf("+");
+        else                   printf("-");
+        printf("%d ",steps[i].interval);
+    }
+    printf("\ncantus firmus:\n");
+    for(int i = 0; i < 11; i++)
+        printf(" %d ",cantusFirmus[i]);
+    printf("\ncounterpoint:\n");
+    for(int i = 0; i < 11; i++)
+        printf(" %d ",counterPoint[i]);
+    printf("\n\n");
+
 }
