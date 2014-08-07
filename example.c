@@ -1,7 +1,91 @@
 #include "counterpoint.c"
 
+#define NOTES 11
+
 void makeCounterpoint(){
-    int cantusFirmus[11] = {1, 3, 2, 1, 4, 3, 5, 4, 3, 2, 1};
+    int cantusFirmus[NOTES] = {1, 3, 2, 1, 4, 3, 5, 4, 3, 2, 1};
+    int consonantHarmonies[NOTES*8]; // four up, four down, for each note
+    
+    for(int i = 0; i < NOTES; i++){
+        // four above
+        consonantHarmonies[i*8+0] = cantusFirmus[i] + 3 - 1;
+        consonantHarmonies[i*8+1] = cantusFirmus[i] + 5 - 1;
+        consonantHarmonies[i*8+2] = cantusFirmus[i] + 6 - 1;
+        consonantHarmonies[i*8+3] = cantusFirmus[i] + 8 - 1;
+        // four below
+        consonantHarmonies[i*8+4] = cantusFirmus[i] - 3 + 1;
+        consonantHarmonies[i*8+5] = cantusFirmus[i] - 5 + 1;
+        consonantHarmonies[i*8+6] = cantusFirmus[i] - 6 + 1;
+        consonantHarmonies[i*8+7] = cantusFirmus[i] - 8 + 1;
+        
+        // because -1 is the same as 1, -2 is one step away, so is +2
+        for(int i = 4; i < 8; i++)
+            if(consonantHarmonies[i] < 1)
+                consonantHarmonies[i] -= 2;
+        
+//        consider fixing this, the root of cantus firmus should be 0
+        
+    }
+    
+//    now build the idea of the interval step
+    
+    interval intervals[NOTES-1];
+    for(int i = 0; i < NOTES-1; i++){
+        //oblique
+        if(cantusFirmus[i] == cantusFirmus[i+1])
+            intervals[i].d = 0;
+        // upward
+        else if(cantusFirmus[i] < cantusFirmus[i+1])
+            intervals[i].d = 1;
+        // down
+        else if(cantusFirmus[i] > cantusFirmus[i+1])
+            intervals[i].d = -1;
+    }
+    
+    for(int i = 1; i < NOTES; i++){
+        short motion = intervals[i-1].d;
+        
+        for(int j = 0; j < 8; j++){
+            short attemptedMotion = consonantHarmonies[i*i+0];
+            if(motion == -1 && attemptedMotion == -1){
+//                this thing trying to to direct motion
+                if(consonantHarmonies[i*8+j] - cantusFirmus[i] == 0 ||
+                   consonantHarmonies[i*8+j] - cantusFirmus[i] == 5 ||
+                   consonantHarmonies[i*8+j] - cantusFirmus[i] == 8 ||
+                   consonantHarmonies[i*8+j] - cantusFirmus[i] == -5 ||
+                   consonantHarmonies[i*8+j] - cantusFirmus[i] == -8  )
+                {
+                    // this means we are doing direct motion into a perfect consonant
+                    //forbidden
+                    consonantHarmonies[i*8+j] = -999;
+                }
+                else{
+                    // everything else is okay
+                }
+            }
+        }
+    }
+    
+    for(int i = 0; i < NOTES; i++){
+        printf("|-");
+        for(int j = 0; j < 8; j++){
+            if(consonantHarmonies[i*8+j] == -999)
+                printf("    ");
+            else if(consonantHarmonies[i*8+j] < 10 && consonantHarmonies[i*8+j] >= 0)
+                printf("%d  ", consonantHarmonies[i*8+j]);
+            else
+                printf("%d ", consonantHarmonies[i*8+j]);
+            
+        }
+        printf("\n");
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    
     step steps[10];
     for(int i = 0; i < 10; i++){
         steps[i].fromNote.pitch = cantusFirmus[i];

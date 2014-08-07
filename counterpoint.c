@@ -2,6 +2,12 @@
 
 // music data types
 
+typedef struct interval interval;
+struct interval {
+    short d; // direction, -1 down, 0 oblique, +1 up
+    
+};
+
 typedef struct note note;
 struct note {
     int pitch;
@@ -13,7 +19,7 @@ typedef struct step step;
 struct step{
     int interval;   // 1 for unison, 5 for fifth, etc..
     // no no, if this was 0 for unison, we could modulus to get the pitch value
-    // okay, compromise, alter this during calculation, so 0 is unison
+    // okay, compromise, alter this during calculation so 0 is unison, but store as 1
     bool direction;
     bool stepwise;  // distance = 2;
     note fromNote;
