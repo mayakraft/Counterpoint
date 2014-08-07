@@ -3,7 +3,16 @@
 #define NOTES 11
 
 void makeCounterpoint(){
+
+
     int cantusFirmus[NOTES] = {1, 3, 2, 1, 4, 3, 5, 4, 3, 2, 1};
+
+    printf("\ncantus firmus:\n  ");
+    for(int i = 0; i < 11; i++)
+        printf(" %d  ",cantusFirmus[i]);
+    printf("\n\n");
+
+    
     int consonantHarmonies[NOTES*8]; // four up, four down, for each note
     
     for(int i = 0; i < NOTES; i++){
@@ -19,9 +28,9 @@ void makeCounterpoint(){
         consonantHarmonies[i*8+7] = cantusFirmus[i] - 8 + 1;
         
         // because -1 is the same as 1, -2 is one step away, so is +2
-        for(int i = 4; i < 8; i++)
-            if(consonantHarmonies[i] < 1)
-                consonantHarmonies[i] -= 2;
+        for(int j = 4; j < 8; j++)
+            if(consonantHarmonies[i*8+j] < 1)
+                consonantHarmonies[i*8+j] -= 2;
         
 //        consider fixing this, the root of cantus firmus should be 0
         
@@ -66,19 +75,25 @@ void makeCounterpoint(){
         }
     }
     
-    for(int i = 0; i < NOTES; i++){
-        printf("|-");
-        for(int j = 0; j < 8; j++){
+    printf("consonant harmonies:\n");
+    for(int j = 0; j < 8; j++){
+        printf("| ");
+        for(int i = 0; i < NOTES; i++){
             if(consonantHarmonies[i*8+j] == -999)
-                printf("    ");
+                printf("     ");
             else if(consonantHarmonies[i*8+j] < 10 && consonantHarmonies[i*8+j] >= 0)
+                printf(" %d  ", consonantHarmonies[i*8+j]);
+            else if(consonantHarmonies[i*8+j] < -9)
+                printf("%d ", consonantHarmonies[i*8+j]);
+            else if(consonantHarmonies[i*8+j] < 0)
                 printf("%d  ", consonantHarmonies[i*8+j]);
             else
-                printf("%d ", consonantHarmonies[i*8+j]);
+                printf(" %d ", consonantHarmonies[i*8+j]);
             
         }
         printf("\n");
     }
+    printf("\n");
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
